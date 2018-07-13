@@ -33,9 +33,11 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# AUTHENTICATION AND AUTHORIZATION
-# Use devise for users session
+# ############## AUTHENTICATION AND AUTHORIZATION ###############
+# Use devise for users session management
 gem 'devise'
+# Use rolify for users role management
+gem 'rolify'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

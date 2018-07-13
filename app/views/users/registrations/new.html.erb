@@ -24,7 +24,14 @@
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation, autocomplete: "off" %>
   </div>
-
+  <% if @registration_code %>
+    <%= hidden_field_tag :code,  @registration_code.code %>
+  <% else %>
+    <div class="field">
+      <%= label_tag :registration_code %><br />
+      <%= text_field_tag :code, '', autocomplete: "off" %>
+    </div>
+  <% end %>
   <div class="actions">
     <%= f.submit "Sign up" %>
   </div>
