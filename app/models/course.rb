@@ -10,4 +10,6 @@ class Course < ApplicationRecord
 
   has_many :sections
   has_many :lectures, through: :sections
+
+  has_many :questions, as: :questionable
 end

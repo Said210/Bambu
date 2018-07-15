@@ -16,6 +16,8 @@ class User < ApplicationRecord
   has_many :teachings, class_name: 'UserTeachesCourse', foreign_key: :teacher_id, dependent: :destroy
   has_many :taught_courses, through: :teachings, source: :taught_course
 
+  has_many :questions
+
   # Virtual atribute to receive registration code from form
   attr_accessor :code
   # This virtual attribute allows a user to sign in by email or username
