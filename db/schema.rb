@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_13_035606) do
+ActiveRecord::Schema.define(version: 2018_07_14_154528) do
+
+  create_table "access_levels", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "level"
+  end
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -35,11 +43,12 @@ ActiveRecord::Schema.define(version: 2018_07_13_035606) do
 
   create_table "registration_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "code"
-    t.integer "access_level"
     t.boolean "redeemed", default: false
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "access_level_id", null: false
+    t.index ["access_level_id"], name: "index_registration_codes_on_access_level_id"
     t.index ["code"], name: "index_registration_codes_on_code", unique: true
     t.index ["user_id"], name: "index_registration_codes_on_user_id"
   end
@@ -63,7 +72,6 @@ ActiveRecord::Schema.define(version: 2018_07_13_035606) do
     t.string "last_name", default: "", null: false
     t.string "occupation"
     t.string "bio"
-    t.integer "access_level"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -74,6 +82,8 @@ ActiveRecord::Schema.define(version: 2018_07_13_035606) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "access_level_id", null: false
+    t.index ["access_level_id"], name: "index_users_on_access_level_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
@@ -87,4 +97,7 @@ ActiveRecord::Schema.define(version: 2018_07_13_035606) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "registration_codes", "access_levels"
+  add_foreign_key "registration_codes", "users"
+  add_foreign_key "users", "access_levels"
 end

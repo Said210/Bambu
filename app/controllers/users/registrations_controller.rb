@@ -20,20 +20,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # POST /resource
-  def create
-    if valid_registration_code?
-      super do |user|
-        user.registration_code = @registration_code
-        user.access_level = @registration_code.access_level
-        user.add_role :student
-        user.save!
-        @registration_code.redeemed = true
-        @registration_code.save!
-      end
-    else
-      redirect_to new_user_registration_path
-    end
-  end
+  # def create
+  #     super
+  # end
 
   # GET /resource/edit
   # def edit
@@ -93,9 +82,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       if @registration_code.redeemed?
         flash[:alert] = "This registration code has already been redeemed"
         false
-      else
-        true
       end
+      true
     else
       flash[:notice] = "You need a registration code"
       false

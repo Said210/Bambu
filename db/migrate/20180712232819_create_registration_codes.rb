@@ -4,7 +4,7 @@ class CreateRegistrationCodes < ActiveRecord::Migration[5.2]
       t.string :code
       t.integer :access_level
       t.boolean :redeemed, default: false
-      t.references :user
+      t.references :user, foreign_key: true
 
       t.timestamps
     end
