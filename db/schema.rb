@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_14_154528) do
+ActiveRecord::Schema.define(version: 2018_07_15_025712) do
 
   create_table "access_levels", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -41,6 +41,22 @@ ActiveRecord::Schema.define(version: 2018_07_14_154528) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "courses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "lectures", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "section_id", null: false
+    t.string "name"
+    t.string "introduction"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["section_id"], name: "index_lectures_on_section_id"
+  end
+
   create_table "registration_codes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "code"
     t.boolean "redeemed", default: false
@@ -62,6 +78,35 @@ ActiveRecord::Schema.define(version: 2018_07_14_154528) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "sections", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "course_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_sections_on_course_id"
+  end
+
+  create_table "user_takes_courses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "enroled_course_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["enroled_course_id", "student_id"], name: "index_user_takes_courses_on_enroled_course_id_and_student_id"
+    t.index ["enroled_course_id"], name: "index_user_takes_courses_on_enroled_course_id"
+    t.index ["student_id", "enroled_course_id"], name: "index_user_takes_courses_on_student_id_and_enroled_course_id", unique: true
+    t.index ["student_id"], name: "index_user_takes_courses_on_student_id"
+  end
+
+  create_table "user_teaches_courses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "teacher_id", null: false
+    t.bigint "taught_course_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["taught_course_id"], name: "index_user_teaches_courses_on_taught_course_id"
+    t.index ["teacher_id", "taught_course_id"], name: "index_user_teaches_courses_on_teacher_id_and_taught_course_id", unique: true
+    t.index ["teacher_id"], name: "index_user_teaches_courses_on_teacher_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -97,7 +142,13 @@ ActiveRecord::Schema.define(version: 2018_07_14_154528) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "lectures", "sections"
   add_foreign_key "registration_codes", "access_levels"
   add_foreign_key "registration_codes", "users"
+  add_foreign_key "sections", "courses"
+  add_foreign_key "user_takes_courses", "courses", column: "enroled_course_id"
+  add_foreign_key "user_takes_courses", "users", column: "student_id"
+  add_foreign_key "user_teaches_courses", "courses", column: "taught_course_id"
+  add_foreign_key "user_teaches_courses", "users", column: "teacher_id"
   add_foreign_key "users", "access_levels"
 end

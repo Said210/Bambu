@@ -3,7 +3,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
-  before_action :set_registration_code, only: [:new, :create]
+  before_action :set_registration_code, only: [:new]
 
   # GET /resource/sign_up
   def new
@@ -78,7 +78,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def valid_registration_code?
-    if @registration_code != nil
+    if @registration_code
       if @registration_code.redeemed?
         flash[:alert] = "This registration code has already been redeemed"
         false

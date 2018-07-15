@@ -8,6 +8,14 @@ class User < ApplicationRecord
   has_one :registration_code
   belongs_to :access_level
 
+  ####### User takes course ###########
+  has_many :enrollments, class_name: 'UserTakesCourse', foreign_key: :student_id, dependent: :destroy
+  has_many :enrolled_courses, through: :enrollments, source: :enrolled_course
+
+  ####### User teaches course #########
+  has_many :teachings, class_name: 'UserTeachesCourse', foreign_key: :teacher_id, dependent: :destroy
+  has_many :taught_courses, through: :teachings, source: :taught_course
+
   # Virtual atribute to receive registration code from form
   attr_accessor :code
   # This virtual attribute allows a user to sign in by email or username
@@ -15,6 +23,8 @@ class User < ApplicationRecord
   validate :presence_of_registration_code
   validate :valid_registration_code
   validates_format_of :username, with: /^[a-zA-Z0-9_\.]*$/, multiline: true
+
+  validates :username, presence: :true, uniqueness: true
 
   before_validation :assign_default_access_level, :assign_registration_code
   after_create :assign_default_role, :redeem_registration_code
