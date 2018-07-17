@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_15_152948) do
+ActiveRecord::Schema.define(version: 2018_07_17_020044) do
 
   create_table "access_levels", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -58,6 +58,23 @@ ActiveRecord::Schema.define(version: 2018_07_15_152948) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "galleries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_galleries_on_project_id"
+  end
+
+  create_table "gallery_has_photos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "gallery_id"
+    t.bigint "photo_id"
+    t.integer "order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gallery_id"], name: "index_gallery_has_photos_on_gallery_id"
+    t.index ["photo_id"], name: "index_gallery_has_photos_on_photo_id"
+  end
+
   create_table "lectures", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "section_id", null: false
     t.string "name"
@@ -65,6 +82,21 @@ ActiveRecord::Schema.define(version: 2018_07_15_152948) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["section_id"], name: "index_lectures_on_section_id"
+  end
+
+  create_table "photos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "projects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "title"
+    t.bigint "cover_id"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cover_id"], name: "index_projects_on_cover_id"
   end
 
   create_table "questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -166,7 +198,11 @@ ActiveRecord::Schema.define(version: 2018_07_15_152948) do
 
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
+  add_foreign_key "galleries", "projects"
+  add_foreign_key "gallery_has_photos", "galleries"
+  add_foreign_key "gallery_has_photos", "photos"
   add_foreign_key "lectures", "sections"
+  add_foreign_key "projects", "photos", column: "cover_id"
   add_foreign_key "questions", "users"
   add_foreign_key "registration_codes", "access_levels"
   add_foreign_key "registration_codes", "users"

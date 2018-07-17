@@ -13,7 +13,20 @@
  */
 @import "bootstrap";
 
-.landing-main {
+.container-fluid.no-gutters {
     padding-left: 0;
     padding-right: 0;
+}
+.row .card {
+    margin-top: 4em;
+}
+
+.banner-message {
+    text-align: center;
+}
+
+.alert.fixed {
+    position: fixed;
+    right: 0;
+    z-index: 11;
 }

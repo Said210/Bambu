@@ -39,5 +39,5 @@ codes = RegistrationCode.create([
     {code: "00024", access_level: earth_saver_level}
 ])
 
-juan = User.create(email: "juanjoze0424@gmail", username: "juanzv", password: "asd123", first_name: "Juan", last_name: "Zenón", access_level: earth_saver_level)
+juan = User.create(email: "juanjoze0424@gmail.com", username: "juanzv", password: "asd123", first_name: "Juan", last_name: "Zenón", access_level: earth_saver_level, code: "00024")
 juan.add_role(:admin)
