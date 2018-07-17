@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_17_020044) do
+ActiveRecord::Schema.define(version: 2018_07_17_034620) do
 
   create_table "access_levels", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_020044) do
   end
 
   create_table "answers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "text"
+    t.text "text", null: false
     t.bigint "question_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_020044) do
 
   create_table "courses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
-    t.string "description"
+    t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -78,9 +78,10 @@ ActiveRecord::Schema.define(version: 2018_07_17_020044) do
   create_table "lectures", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "section_id", null: false
     t.string "name"
-    t.string "introduction"
+    t.text "introduction", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "vimeo", null: false
     t.index ["section_id"], name: "index_lectures_on_section_id"
   end
 
@@ -96,12 +97,13 @@ ActiveRecord::Schema.define(version: 2018_07_17_020044) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "details"
     t.index ["cover_id"], name: "index_projects_on_cover_id"
   end
 
   create_table "questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "title"
-    t.string "details"
+    t.text "details", null: false
     t.string "questionable_type"
     t.bigint "questionable_id"
     t.datetime "created_at", null: false
